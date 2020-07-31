@@ -1,0 +1,67 @@
+<ion-app>
+  <ion-split-pane *ngIf="apiService.isLoggedIn">
+    <ion-menu type="overlay" (ionDidOpen)="menuOpened()" (ionClose)="menuClosed()" [swipeEnabled]="false">
+      <ion-header style="background-color:#6633cc;height: 20%;" no-border>
+        <div style="width: 100%">
+          <div style="width: 36%;float: left;text-align: center">
+            <ion-avatar (click)="navigate()" style="height:65px;width:65px;">
+
+              <img *ngIf="userData.profileImage === null" src="assets/img/profile_icon.png" style="margin: 50% 36%;">
+
+              <img *ngIf="userData.profileImage !== null" [src]="profile" style="margin: 50% 36%;">
+              
+              
+
+              <!-- <ion-img [src]="userData.profileImage !== null || userData.profileImage !== undefined ? userData.profileImage : defaultProfileImage" style="margin: 50% 36%;"></ion-img> -->
+            </ion-avatar>
+          </div>
+          <div style="width: 64%;float: left;padding-bottom: 11%;">
+            <p style="margin-top:26%;font-size: 14px;color: #ffffff;">{{userData.fullName}}</p>
+            <p style="margin-top:-6%;font-size: 14px;color: #ffffff;">{{userData.userName}}</p>
+          </div>
+        </div>
+      </ion-header>
+      <ion-content style="background:#ffffff">
+        <ion-list  no-lines style="background: border-box;">
+          <ion-menu-toggle auto-hide="false">
+            <ion-item class="ionItem" [routerLink]="['/adopt-landing']" lines="none">
+              <!-- <ion-icon slot="start" [name]="p.icon"></ion-icon> -->
+              <ion-label>Home</ion-label>
+            </ion-item>
+            <ion-item class="ionItem" [routerLink]="['/add-pet']" lines="none">
+              <ion-label>Add a Pet</ion-label>
+            </ion-item>
+            <ion-item class="ionItem" [routerLink]="['/settings']" lines="none">
+              <ion-label>Settings</ion-label>
+            </ion-item>
+            <ion-item class="ionItem" (click)="redirectFAQ()" lines="none">
+              <ion-label>FAQ's</ion-label>
+            </ion-item>
+            <!-- <ion-item class="ionItem" (click)="redirectPrivacyPolicy()" lines="none">
+              <ion-label>Privacy Policy</ion-label>
+            </ion-item>
+            <ion-item class="ionItem" (click)="redirectTerms()" lines="none">
+              <ion-label>Terms and Conditions</ion-label>
+            </ion-item> -->
+            <ion-item class="ionItem" (click)="redirectEULA()" lines="none">
+              <ion-label>EULA</ion-label>
+            </ion-item>
+            <ion-item class="ionItem" [routerLink]="['/feedback']" lines="none">
+              <ion-label>Help and Feedback</ion-label>
+            </ion-item>
+            <ion-item class="ionItem" (click)="RateUs()" lines="none">
+              <ion-label>Rate Us</ion-label>
+            </ion-item>
+            <ion-item class="ionItem" (click)="logout()" lines="none">
+              <ion-label>
+                Log out
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet main></ion-router-outlet>
+  </ion-split-pane>
+  <ion-router-outlet *ngIf="!apiService.isLoggedIn"></ion-router-outlet>
+</ion-app>

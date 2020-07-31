@@ -1,0 +1,32 @@
+ion-slide {
+    flex-direction: column;
+    h1 {
+        color: #0f0d0d;
+        font-size: 36px;
+        line-height: 40px;
+        font-weight: 500;
+        // margin-top: 20%;
+    }
+    p {
+        color: #0f0d0d;
+        margin-bottom: 10%;
+        font-size: 12sp;
+        letter-spacing: -0.12sp;
+    }
+}
+ion-thumbnail {
+    height: 70%;
+    width: 100%;
+    overflow: hidden; 
+}
+.swiper-pagination .swiper-pagination-bullets {
+    bottom: 0px !important;
+}
+.imgDiv{
+    margin-top: -0%;
+    margin-bottom: 10%;
+}
+.textDiv{
+    margin-top: -30%;
+    position: absolute;
+}

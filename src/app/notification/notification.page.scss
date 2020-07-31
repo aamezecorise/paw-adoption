@@ -1,0 +1,13 @@
+.toolbar {
+    box-shadow: 0px 1px 5px #888888;
+    --background:#6633cc;
+    height: 56px;
+    text-align: center;
+}
+.dot {
+    height: 5px;
+    width: 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }

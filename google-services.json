@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "149900265507",
+    "firebase_url": "https://pawzeeble-527ac.firebaseio.com",
+    "project_id": "pawzeeble-527ac",
+    "storage_bucket": "pawzeeble-527ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149900265507:android:98b006efce5f1bd4d48996",
+        "android_client_info": {
+          "package_name": "com.pawzeeble"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149900265507-b8d04563117rbmorb1m8ptr6ifhmj7fb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pawzeeble",
+            "certificate_hash": "433a18246c7d908b52b919508c5f8942a3acc2b2"
+          }
+        },
+        {
+          "client_id": "149900265507-9p4qbc0703p9lvbocl75kr3e8hn5sbiq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDppsXGh-LLzyuIxM9E9RmTJeRQAwlGSRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149900265507-9p4qbc0703p9lvbocl75kr3e8hn5sbiq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "149900265507-eravtsitmkennkngo9ed4a7i24b14abq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pawzeeble"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

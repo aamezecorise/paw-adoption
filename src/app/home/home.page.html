@@ -1,0 +1,45 @@
+<ion-content>
+  <div style="height: 85vh">
+    <ion-slides #slides pager="true" [options]="sliderOpts" (ionSlideDidChange)="getIndex($event)">
+      <ion-slide>
+        <div class="textDiv">
+          <h1>Search</h1>
+        </div>
+        <div class="imgDiv">
+          <ion-thumbnail>
+              <img src="assets/slides/slide0.png">
+            </ion-thumbnail>
+        </div>
+      </ion-slide>
+      <ion-slide>
+        <div class="textDiv">
+          <h1>Connect</h1>
+        </div>
+        <div class="imgDiv">
+          <ion-thumbnail>
+            <img style="margin-top: 2%;" src="assets/slides/slide1.png">
+          </ion-thumbnail>
+
+        </div>
+      </ion-slide>
+      <ion-slide>
+        <div class="textDiv">
+          <h1>Adopt</h1>
+        </div>
+        <div class="imgDiv">
+          <ion-thumbnail>
+            <img src="assets/slides/slide2.png">
+          </ion-thumbnail>
+        </div>
+
+      </ion-slide>
+    </ion-slides>
+    <div style="width:100%;margin-top: 10%;text-align: center">
+      <p> An online portal for you to find a <br />
+        furry friend and take it home.</p>
+    </div>
+  </div>
+</ion-content>
+<ion-footer no-border padding>
+  <ion-button expand="block" id="blueButton" color="orange" (click)="gotoLogin()">Get Started</ion-button>
+</ion-footer>

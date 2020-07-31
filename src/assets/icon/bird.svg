@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <defs>
+  <style>.cls-1{fill:#6633cc}.cls-2{fill:none}</style>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <g id="Group_54">
+   <path class="cls-1" d="m45.970998,34.656049a6.167,6.167 0 0 0 -5.18,3.039l0,-7.842a10.856,10.856 0 0 0 -10.852,-10.853l0,17.653l-19.939,0l0,1.013l8.277,0l12.357,7.206a8.175,8.175 0 0 0 4.08,1.071a8.4,8.4 0 0 0 4.08,-1.071l9.463,-5.527l6.6,0l-3.7,-1.678a6.166,6.166 0 0 0 -5.186,-3.011zm0.666,3.154a0.666,0.666 0 1 1 0.666,-0.666a0.673,0.673 0 0 1 -0.666,0.666z" id="Path_2460"/>
+   <g id="Group_3479">
+    <path class="cls-2" d="m0,0l64,0l0,64l-64,0l0,-64z" id="Rectangle_17757"/>
+   </g>
+   <g id="Group_3480">
+    <path class="cls-2" d="m0,0l64,0l0,64l-64,0l0,-64z" id="Rectangle_17757-2"/>
+   </g>
+  </g>
+ </g>
+</svg>
+</body>
+</html>

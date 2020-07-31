@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar class="toolBar">
+    <ion-icon (click)="navigateBack()" src="assets/icon/_ionicons_svg_md-arrow-back.svg"
+      slot="start" style="margin-left: 10px;font-size: 24px;float: right;word-spacing: 3px;margin-top: 0%;color: white">
+    </ion-icon>
+    <ion-title style="font-family: Roboto-Regular;font-size:20px;line-height: 24px;color: white;
+    text-align: center;margin-top: 0%;margin-right:10%">
+      Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+    <ion-label style="font-size: 20px;">Account settings</ion-label>
+    </ion-list-header>
+    <ion-item (click)="updateEmail()">Change Email Id</ion-item>
+    <ion-item (click)="updatePassword()">Change Password</ion-item>
+    <ion-item (click)="updateInfo()">Update Information</ion-item>
+  </ion-list>
+</ion-content>

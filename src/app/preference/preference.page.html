@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons *ngIf="platform === 'android'" slot="start"
+      style="float: left;color: #ffffff;margin-left: 10px;font-size:16px" (click)="closeModal()">Cancel
+    </ion-buttons>
+    <ion-buttons *ngIf="platform === 'ios'" slot="start"
+      style="float: left;color: #ffffff;margin-left: 10px;font-size:16px;margin-top:10px" (click)="closeModal()">Cancel
+    </ion-buttons>
+    <ion-title [ngClass]="platform === 'ios' ? 'titleOnIos' : 'titleOnAndroid'">
+      Pet Preferences</ion-title>
+    <ion-buttons *ngIf="platform === 'android'" slot="end"
+      style="float: left;color: #ffffff;margin-right: 10px;font-size:16px" (click)="clearSelection()">Clear
+    </ion-buttons>
+    <!-- <ion-icon src="assets/icon/_ionicons_svg_md-arrow-back.svg" slot="end"
+      style="font-size: 28px;float: right;color: #6633cc;"></ion-icon> -->
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <div style="width:100%;text-align: left">
+    <mat-label class="labels">Select your Preference</mat-label>
+    <div style="padding-top: 3%;">
+      <mat-radio-group aria-label="Select an option" [(ngModel)]="petCategory" (change)="radioChange($event)">
+        <mat-radio-button value="dog" style="font-size: 14px;">Dog
+        </mat-radio-button>
+        <mat-radio-button value="cat" style="margin-left: 40px;font-size: 14px;">
+          Cat</mat-radio-button>
+        <mat-radio-button value="bird" style="margin-left: 40px;font-size: 14px;">
+          Bird</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+  <div style="margin-top: 7%;width:100%;text-align: left">
+    <mat-label class="labels">Gender Preference?</mat-label>
+    <div style="padding-top: 3%;">
+      <mat-radio-group aria-label="Select an option" [(ngModel)]="gender">
+        <mat-radio-button value="male" style="font-size: 14px;">Male
+        </mat-radio-button>
+        <mat-radio-button value="female" style="margin-left: 40px;font-size: 14px;">
+          Female</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+  <div *ngIf="petCategory !== 'bird' && petCategory !== null" style="width:100%;text-align: left;margin-top: 7%">
+    <ion-label style="font-size: 14px;color: #8e8e8e;">Select few breeds of your choice</ion-label>
+    <ion-item lines="none" [ngClass]="isItemClicked ? 'itemSelect' : 'itemSelect1'">
+      <ionic-selectable #selectComponent (click)="open()" (onClose)="onClose($event)" [items]="breeds"
+        itemValueField="name" itemTextField="name" [canSearch]="true" (onSearch)="SearchBreeds($event)" [isMultiple]="true"
+        (onChange)="breedChanged($event)" [hasInfiniteScroll]="true" (onInfiniteScroll)="getMoreBreeds($event)">
+        <ng-template ionicSelectableItemIconTemplate let-port="item" let-isBreedSelected="isItemSelected"
+          itemIconSlot="start">
+          <ion-icon slot="start" [name]="isBreedSelected ? 'checkbox' : 'square-outline'"
+            [color]="isBreedSelected ? 'orange' : null">
+          </ion-icon>
+        </ng-template>
+        <ng-template ionicSelectableFooterTemplate>
+          <ion-footer>
+            <ion-toolbar>
+              <ion-row text-center>
+                <ion-col size="4">
+                  <ion-button fill="clear" color="orange" (click)="clear()">Clear</ion-button>
+                </ion-col>
+                <ion-col size="4">
+                  <!-- <ion-button fill="clear" (click)="toggleItems()">Toggle</ion-button> -->
+                </ion-col>
+                <ion-col size="4">
+                  <ion-button fill="clear" color="orange" (click)="confirm()">Confirm</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-toolbar>
+          </ion-footer>
+        </ng-template>
+        <ng-template ionicSelectablePlaceholderTemplate>
+          <span *ngIf="breedArray.length == 0" style="font-size: 14px;color: #8e8e8e;">Select few breeds of your choice</span>
+              <!-- <span *ngIf="petForm.controls['primary_breed'].value===null" style="font-size: 14px;color: #8e8e8e;">Select primary breed</span> -->
+            <span *ngIf="breedArray.length > 0" style="font-size: 14px;color: #454545;">
+              <div *ngFor="let item of breedArray">
+                <p>{{item}}</p>
+              </div>
+            </span>
+        </ng-template>
+      </ionic-selectable>
+    </ion-item>
+  </div>
+  <div style="width:100%;text-align: left;margin-top: 8%;">
+    <p style="font-size: 14px;color: #8e8e8e;">Age Range (Years)</p>
+    <ion-range min="0" max="20" [(ngModel)]="ageRanger" color="orange" id="dual-range" value= "1 | { lower: 0; upper: 2; }" dual-knobs pin style="margin-top: -6%;"
+      (ionChange)="onChange($event)">
+      <ion-label slot="start">0 Yrs</ion-label>
+      <ion-label slot="end">20 Yrs</ion-label>
+    </ion-range>
+  </div>
+  <div style="width:100%;text-align: left;"> 
+    <p style="font-size: 14px;color: #8e8e8e;">Search Radius (Km)</p>
+    <ion-range min="15" value="15" pin color="orange" style="margin-top: -6%;" [(ngModel)]="radiusRange" (ionChange)="onChangeRadius($event)">
+      <ion-label slot="start">15 Km</ion-label>
+      <ion-label slot="end">{{radiusInKm}} Km</ion-label>
+    </ion-range>
+  </div>
+  <div id="poiDiv"></div>
+</ion-content>
+<ion-footer no-border padding *ngIf="keyboardCheck()" style="background: white;">
+  <ion-button expand="block" id="blueButton" color="orange" (click)="filter()">Set Pet Preferences</ion-button>
+</ion-footer>

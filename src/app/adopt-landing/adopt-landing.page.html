@@ -1,0 +1,25 @@
+<!-- <ion-header style="background-color:#fff3ef;" no-border>
+    <ion-avatar (click)="navigate()" style="height:65px;width:65px;">
+      <ion-img [src]="userData.profileImage !== null ? userData.profileImage : defaultProfileImage" style="margin: 20% 18%;"></ion-img>
+    </ion-avatar>
+</ion-header> -->
+<ion-content text-center>
+  <div style="width: 100%;text-align: left;">
+      <ion-avatar (click)="navigate()" style="height:65px;width:65px;">
+          <ion-img [src]="userData.profileImage !== null ? userData.profileImage : defaultProfileImage" style="margin: 20% 18%;"></ion-img>
+      </ion-avatar>
+  </div>
+  <div class="container">
+      <h1 (tap)="onClick(0)" style="color: #6633cc;font-size:14px;line-height: 19px;margin-top: 10px;">
+          Pet Profile List</h1>
+    <div class="radio-wrapper">
+      <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="todo"
+        (cdkDropListDropped)="drop($event)">
+        <div *ngFor="let item of todo; let position=index"(click)="onClick(position)" (touchstart)="touchStart()" cdkDragLockAxis="y" cdkDragBoundary=".container" cdkDrag [ngClass]="item !== '' ? 'example-box' : 'example-box1'">
+          <ion-icon src="assets/icon/group_52.svg" style="font-size: 56px;margin:5px"></ion-icon></div>
+      </div>
+    </div>
+    <h1 (tap)=onClick(2) style="color: #6633cc;font-size:14px;line-height: 19px;margin-top: 10px;">
+        {{petCountUnderUser != 0 ? 'Go to Dashboard' : 'Create Pet Profile'}}</h1>
+  </div>
+</ion-content>

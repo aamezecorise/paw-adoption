@@ -1,0 +1,63 @@
+<ion-content>
+  <div class="topDiv">
+    <!-- <div style="height: 50%;width:50%;margin:3% auto">
+      <ion-img src="assets/img/pluto_sign_in.png"></ion-img>
+    </div> -->
+    <p id="welcome">Hello!</p>
+    <div style="text-align: center;width: 100%;margin-top: -3%;">
+      <h1 id="signText">Sign In to Pawzeeble</h1>
+    </div>
+  </div>
+  <div>
+    <form class="form-md" [formGroup]="loginForm">
+      <div>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <input class="floating-label_input" type="text" name="username" placeholder=" "
+                  [formControl]="loginForm.controls['username']" (input)="OnChangeInput($event.target.value)">
+                <label class="upLabel" style="font-size: 14px;margin-top: -4px;">&nbsp;&nbsp;Email or Username&nbsp;&nbsp;</label>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <input class="floating-label_input" type="{{type}}" name="password"
+                  [formControl]="loginForm.controls['password']" placeholder=" " (keyup.enter)="hideKeyboard()">
+                <label class="upLabel" style="font-size: 14px;margin-top: -4px;">&nbsp;&nbsp;Password&nbsp;&nbsp;</label>
+                <mat-icon matSuffix class="EyeMain">
+                  <ion-icon *ngIf="!isToggle" style="margin-top: 2px;" end name="eye" class="EyeIcon" (click)="togglePassword()"></ion-icon>
+                  <ion-icon *ngIf="isToggle" style="margin-top: 2px;" end name="eye-off" class="EyeIcon" (click)="togglePassword()"></ion-icon>
+                </mat-icon>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <div (click)="forgotPassword()" style="width: fit-content;float: right;">
+        <p id="ftext" style="text-align: right"><a>Forgot password?</a></p>
+      </div>
+      <ion-row style="margin-top: 10%;">
+        <ion-col col-12>
+          <div style="margin:0px auto;width: 145px;">
+            <ion-fab-button (click)="LoginGoogle()" id="btnFab" style="float: right;">
+              <ion-icon src="assets/icon/icons8-google.svg"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)="LoginWithFaceBook()" id="btnFab" style="float: left;">
+              <ion-icon src="assets/icon/icons8-facebook-f-filled.svg" style="color:#3b5998"></ion-icon>
+            </ion-fab-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </form>
+
+  </div>
+</ion-content>
+<ion-footer class="footer" no-border padding *ngIf="keyboardCheck()">
+  <div style="text-align: center">
+    <ion-button expand="block" id="blueButton" color="orange" (click)="Login()" [disabled]="!loginForm.valid">
+      <ion-spinner *ngIf="isLoader" name="crescent"></ion-spinner> {{!isLoader ? 'Sign In':''}}
+    </ion-button>
+    <p id="ltext">Don't have an account? <a [routerLink]="['/signup']">Sign Up</a></p>
+  </div>
+</ion-footer>

@@ -1,0 +1,247 @@
+<ion-header>
+  <ion-toolbar class="header-toolbar">
+  <ion-buttons slot="start" style="float: left;color: #ffffff">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+  <p style="text-align: center;font-size: 16px;color:#ffffff;margin:0;font-weight: bold;margin-right: 18px;">
+    @{{userData.userName}}</p>
+  <ion-icon *ngIf="!isEdit && isAbout" name="create" slot="end" (tap)="editProfile()"
+    style="margin-right: 16px;font-size: 24px;float: right;color: #ffffff">
+  </ion-icon>
+  <ion-icon *ngIf="isEdit && isAbout" name="close-circle" slot="end" (tap)="close()"
+    style="margin-right: 16px;font-size: 24px;float: right;color: #ffffff">
+  </ion-icon>
+  <ion-icon *ngIf="!isEdit && !isAbout" name="close-circle" slot="end"
+    style="margin-right: 16px;font-size: 24px;float: right;color: #6633cc">
+  </ion-icon>
+</ion-toolbar>
+  <div style="width:100%;">
+    <ion-avatar *ngIf="!isEdit" style="height:100px;width:100px;margin: 16% auto">
+      <ion-img *ngIf="userData.profileImage == null" src="assets/img/profile_icon.png"></ion-img>
+      <ion-img *ngIf="userData.profileImage !== null" [src]="userData.profileImage"></ion-img>
+    </ion-avatar>
+    <ion-avatar *ngIf="isEdit" style="height:100px;width:100px;margin: 16% auto" (click)="selectFile()">
+      <ion-img *ngIf="base64Image == null && userData.profileImage !== null" [src]="userData.profileImage"></ion-img>
+      <ion-img *ngIf="base64Image !== null" [src]="base64Image"></ion-img>
+      <ion-img *ngIf="userData.profileImage == null && base64Image == null" src="assets/img/profile_icon.png"></ion-img>
+      <div style="float: right;margin: -56px -10px;">
+        <ion-icon name="add-circle" color="orange"></ion-icon>
+      </div>
+    </ion-avatar>
+    <div style="margin-top: -12%;">
+      <p style="text-align: center;font-size: 24px;line-height: 29px;color:#000000">{{userData.fullName}}</p>
+      <!-- <p style="text-align: center;font-size: 14px;line-height: 18px;color:#000000;margin-top: -10px;">
+        {{userData.userName}}</p> -->
+    </div>
+    <ion-segment *ngIf="!isEdit" style="margin-top:10px;--background: transparent !important" color="orange"
+      [(ngModel)]="selectSections.selectedSection">
+      <ion-segment-button value="{{selectSections.About}}" id="segmentButton" (click)="clickAbout()">
+        About
+      </ion-segment-button>
+      <ion-segment-button value="{{selectSections.SavedPets}}" (click)="getSavedPets();" (click)="clickStarred()" id="segmentButton">
+        {{userData.isNgo ? 'Starred Pets' : 'Starred Pets'}}
+      </ion-segment-button>
+      <ion-segment-button value="{{selectSections.Adopted}}" (click)="getAdoptedPets()" id="segmentButton">
+        Adopted
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+</ion-header>
+
+<ion-content style="background-color:#f6f6f6;">
+  <div *ngIf="!isEdit" [ngSwitch]="selectSections.selectedSection">
+    <div *ngSwitchCase="'About'" padding>
+      <div>
+        <p id="sampleText">{{userData.about_ngo}}
+        </p>
+      </div>
+      <div *ngIf="userData.isNgo">
+        <ion-icon src="assets/icon/_ionicons_svg_md-globe.svg" style="color: #000000;font-size: 23px;"></ion-icon>
+        <p>{{userData.website}}</p>
+      </div>
+      <div>
+        <ion-icon name="mail" style="color: #000000;font-size: 23px;"></ion-icon>
+        <p>{{userData.email}}</p>
+      </div>
+      <div *ngIf="userData.phoneNumber !== null">
+        <ion-icon name="call" style="color: #000000;font-size: 23px;"></ion-icon>
+        <p>{{userData.phoneNumber}}</p>
+      </div>
+    </div>
+    <div *ngSwitchCase="'SavedPets'">
+      <div *ngIf="isLoading" style="width:100%;text-align: center; margin-top: 50%;">
+        <ion-spinner *ngIf="isLoading" name="crescent" id="pageLoader" color="orange" style="height: 64px;width: 64px">
+        </ion-spinner>
+        <!-- <p>Loading...</p> -->
+      </div>
+      <div class="msgDiv" *ngIf="savedPetsList.length == 0 && !isLoading">
+        <p style="font-size: 12px;color: gray;">You can save your favourite selections here. Just go to any profile of your choice
+        in adoption list and star it from the top right corner.</p>
+      </div>
+      <ion-card style="border-radius: 8px;" *ngFor="let item of savedPetsList">
+        <ion-card-header style="height: 52px;">
+          <ion-toolbar style="margin-top: -20px;">
+            <ion-card-title class="petName_Card" slot="start">{{item.primary_breed}}</ion-card-title>
+            <ion-icon (click)="presentPopover($event, item, 'saved')" src="assets/icon/_ionicons_svg_md-more.svg"
+              style="font-size: 25px" slot="end"></ion-icon>
+          </ion-toolbar>
+        </ion-card-header>
+        <ion-card-content (click)="viewDetails(item)">
+          <div style="width:100%;margin-top:0%;height: 100%;">
+            <div style="float: left;width: 40%;height: 100%;margin-bottom: 15px;">
+              <div style="width: 100%;height: 100%;">
+                <ion-avatar *ngIf="platform === 'android'" style="width:13ch;height:13ch;margin: 0ch auto">
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+                </ion-avatar>
+                <ion-avatar *ngIf="platform === 'ios'" style="width:14ch;height:14ch;margin: 0ch auto">
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+                </ion-avatar>
+              </div>
+              <div style="width: 100%;text-align: center;margin-top: 5px;">
+                <p >{{petName(item.petName)}}</p>
+              </div>
+            </div> 
+            <div class="vl2" style="float: left;width: 0.5px;height: 16ch;margin-left: 5%;"></div>
+            <div style="float: left;width: 50%;height: 100%;padding-bottom: 5%;">
+              <div style="width: 100%;height: 45%;">
+                <ion-row>
+                  <ion-col col-4 id="heading">AGE</ion-col>
+                  <ion-col col-8 id="values">{{petAge(item.birthday)}} M</ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 5%;">
+                  <ion-col col-4 id="heading">GENDER</ion-col>
+                  <ion-col col-8 id="values">{{petGender(item.gender)}}</ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 5%;">
+                  <ion-col col-4 id="heading">WEIGHT</ion-col>
+                  <ion-col col-8 id="values">{{item.weight}} Kg</ion-col>
+                </ion-row>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div *ngSwitchCase="'Adopted'">
+      <div *ngIf="isLoading" style="width:100%;text-align: center; margin-top: 50%;">
+        <ion-spinner *ngIf="isLoading" name="crescent" id="pageLoader" color="orange" style="height: 64px;width: 64px">
+        </ion-spinner>
+        <!-- <p>Loading...</p> -->
+      </div>
+      <div class="msgDiv" *ngIf="adoptedPetsList.length == 0 && !isLoading">
+        <p style="font-size: 12px;color: gray;">If your furry friend got adopted, you can create your database of new parents of your friends.
+          Click on 3 dot menu on card in your dashboard and select Mark as Adopted. Fill in the details and you are good to go.</p>
+      </div>
+      <ion-card style="border-radius: 8px;" *ngFor="let item of adoptedPetsList">
+        <ion-card-header style="height: 52px;">
+          <ion-toolbar style="margin-top: -20px;">
+            <ion-card-title class="petName_Card" slot="start">{{item.primary_breed}}</ion-card-title>
+            <ion-icon (click)="presentPopover($event, item, 'adopted')" src="assets/icon/_ionicons_svg_md-more.svg"
+              style="font-size: 25px" slot="end"></ion-icon>
+          </ion-toolbar>
+        </ion-card-header>
+        <ion-card-content (click)="viewDetails(item)">
+          <div style="width:100%;margin-top:0%;height: 100%;">
+            <div style="float: left;width: 40%;height: 100%;margin-bottom: 15px;">
+              <div style="width: 100%;height: 100%;">
+                <ion-avatar *ngIf="platform === 'android'" style="width:13ch;height:13ch;margin: 0ch auto">
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+                </ion-avatar>
+                <ion-avatar *ngIf="platform === 'ios'" style="width:14ch;height:14ch;margin: 0ch auto">
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+                </ion-avatar>
+              </div>
+              <div style="width: 100%;text-align: center;margin-top: 5px;">
+                <p >{{petName(item.petName)}}</p>
+              </div>
+            </div> 
+            <div class="vl2" style="float: left;width: 0.5px;height: 16ch;margin-left: 5%;"></div>
+            <div style="float: left;width: 50%;height: 100%;padding-bottom: 5%;">
+              <div style="width: 100%;height: 45%;">
+                <ion-row>
+                  <ion-col col-4 id="heading">AGE</ion-col>
+                  <ion-col col-8 id="values">{{petAge(item.birthday)}} M</ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 5%;">
+                  <ion-col col-4 id="heading">GENDER</ion-col>
+                  <ion-col col-8 id="values">{{petGender(item.gender)}}</ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 5%;">
+                  <ion-col col-4 id="heading">WEIGHT</ion-col>
+                  <ion-col col-8 id="values">{{item.weight}} Kg</ion-col>
+                </ion-row>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+  <div *ngIf="isEdit">
+    <form [formGroup]="signUpForm">
+      <ion-grid style="margin-top:10px">
+        <ion-row>
+          <ion-col size="12">
+            <div class="relPos upInputs">
+              <input #phoneInput id="phoneInput" class="floating-label_input" type="number" required placeholder=" "
+                [formControl]="signUpForm.controls['phoneNumber']" (input)=_keyPress($event.target.value)>
+              <label class="upLabel">&nbsp;&nbsp;Phone Number&nbsp;&nbsp;</label>
+              <mat-error *ngIf="hasError('phoneNumber', 'pattern')"></mat-error>
+            </div>
+          </ion-col>
+          <ion-col size="12" *ngIf="isToggle">
+            <div class="relPos upInputs">
+              <input class="floating-label_input" type="text" name="website" placeholder=" "
+                [formControl]="signUpForm.controls['website']">
+              <label class="upLabel">&nbsp;&nbsp;Website&nbsp;&nbsp;</label>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="relPos upInputs">
+              <input class="floating-label_input" type="text" name="username" (keyup)="removeSpace($event.target.value)"
+                placeholder=" " [formControl]="signUpForm.controls['userName']"
+                (input)="OnChangeInput2($event.target.value)"
+                (keyup)="check_username_exists_or_not($event.target.value)">
+              <label class="upLabel">&nbsp;&nbsp;Username&nbsp;&nbsp;</label>
+              <mat-error
+                *ngIf="hasError('userName', 'pattern') || hasError('userName', 'required') || usernameFlag == 1">
+              </mat-error>
+              <mat-icon matSuffix class="EyeMain2">
+                <ion-icon *ngIf="hasError('userName', 'pattern') || usernameFlag == 1" end name="alert"
+                  style="font-size: 24px;color: red"></ion-icon>
+                <ion-icon *ngIf="!signUpForm.controls['userName'].invalid && usernameFlag == 0" end
+                  name="checkmark-circle" style="font-size: 24px; color: green"></ion-icon>
+              </mat-icon>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="relPos upInputs">
+              <textarea class="floating-label_input" type="text" placeholder="Tell others something about yourself"
+                [formControl]="signUpForm.controls['about_ngo']"></textarea>
+              <label class="upLabel" style="font-size: 14px;">&nbsp;&nbsp;Bio&nbsp;&nbsp;</label>
+            </div>
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+</ion-content>
+<ion-footer no-border padding *ngIf="keyboardCheck() && isEdit" style="background: white;">
+  <ion-button [disabled]="usernameFlag == 1" expand="block" id="blueButton" color="orange"
+    (click)="updateUserProfile()">
+    <ion-spinner *ngIf="isLoading1" name="crescent"></ion-spinner> {{!isLoading1 ? 'Save':''}}
+  </ion-button>
+</ion-footer>

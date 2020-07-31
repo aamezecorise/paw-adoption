@@ -1,0 +1,137 @@
+<!-- <ion-header class="details-header" [ngStyle]= "{'background-image': 'url('+ petDetails.profilePics +')'}"> -->
+<ion-header class="details-header">
+  <ion-toolbar no-border>
+    <ion-icon (click)="closeModal()" src="assets/icon/_ionicons_svg_md-arrow-back.svg" slot="start"
+      style="margin-left: 10px;font-size: 28px;float: right;color: white"></ion-icon>
+    <ion-icon *ngIf="!isBookMarked && petDetails.userId !== userData.id" name="star-outline" slot="end" (click)="bookMarkPet()"
+      style="margin-left: 10px;font-size: 28px;float: right;color: #f4b400"></ion-icon>
+    <ion-icon *ngIf="isBookMarked && petDetails.userId !== userData.id" name="star" slot="end" (click)="unBookMarkPet()"
+      style="margin-left: 10px;font-size: 28px;float: right;color: #f4b400"></ion-icon>
+
+    <ion-icon (click)="shareLink($event)" src="assets/icon/share-social.svg" slot="end"
+    style="margin-left: 10px;font-size: 26px;float: right;color: white"></ion-icon>
+
+    <ion-icon (click)="presentPopover($event)" src="assets/icon/_ionicons_svg_md-more.svg" slot="end"
+    style="margin-left: 10px;font-size: 26px;float: right;color: white"></ion-icon>
+  
+  </ion-toolbar>
+  <ion-slides #slides pager="true" [options]="sliderOpts" (ionSlideDidChange)="slideChanged($event)"
+    style="margin-top: -56px;background: black;height: 40vh;">
+    <ion-slide *ngFor="let item of mediaArray; let i = index">
+      <!-- <div class="imageSlide" *ngIf="item.type === 'image'" [ngStyle]= "{'background-image': 'url('+ item.file +') no-repeat fixed'}">
+      </div> -->
+      <ion-img *ngIf="item.type === 'image'" [src]="item.file" class="sliderImage" width="deviceWidth"
+        height="videoHeight"></ion-img>
+      <video [id]="'video' + i" *ngIf="item.type === 'video'" controls controlsList="nodownload" preload="auto" [muted]="false" [loop]="false"
+        style="width: 100%;" height="videoHeight">
+        <source [src]="item.file" type="video/mp4">
+        <source [src]="item.file" type="video/3gp">
+        <source [src]="item.file" type="video/mov">
+        <source [src]="item.file" type="video/mpeg">
+        <source [src]="item.file" type="video/qt">
+        <source [src]="item.file" type="video/flv">
+        <source [src]="item.file" type="video/mpe">
+        <source [src]="item.file" type="video/m4p">
+        <source [src]="item.file" type="video/webm">
+        <source [src]="item.file" type="video/swf">
+        <source [src]="item.file" type="video/mpv">
+        <source [src]="item.file" type="video/m4v">
+        <source [src]="item.file" type="video/ogg">
+        <source [src]="item.file" type="video/avchd">
+        <source [src]="item.file" type="video/mp2">
+        <source [src]="item.file" type="video/avi">
+        <source [src]="item.file" type="video/mpg">
+        <source [src]="item.file" type="video/wmv">
+      </video>
+    </ion-slide>
+  </ion-slides>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-row>
+      <ion-col col-6>
+        <p class="heading">Weight</p>
+        <p class="values">{{petDetails.weight}} Kg</p>
+      </ion-col>
+      <div id="vl_details"></div>
+      <ion-col col-6>
+        <p class="heading">Age</p>
+        <p class="values">{{petAge(petDetails.birthday)}} M</p>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <ion-card>
+    <p style="color:#454545;font-size:30px;margin-left:10px;margin-top: 30px;">{{petName(petDetails.petName)}}</p>
+    <p id="titles" style="margin-top: 10px;">Primary Breed</p>
+    <p id="sampleText" style="padding:10px">{{petDetails.primary_breed}}</p>
+
+    <p id="titles" style="margin-top: 10px;">Secondary Breed</p>
+    <p id="sampleText" style="padding:10px">{{petDetails.secondary_breed ? petDetails.secondary_breed:'NA'}}</p>
+
+    <p id="titles">About {{petNameAtAbout(petDetails.petName)}}</p>
+    <p class="sampleText">{{petDetails.description}}</p>
+
+    <p id="titles">Gender</p>
+    <p class="sampleText">{{petGender(petDetails.gender)}}</p>
+
+    <p id="titles">Vaccinated?</p>
+    <p class="sampleText">{{petVaccinate(petDetails.isVaccinated)}}</p>
+
+    <p id="titles">Neutered?</p>
+    <p class="sampleText">{{petNeutered(petDetails.isNeutered)}}</p>
+
+    <p id="titles">Medical History</p>
+    <p class="sampleText">{{petDetails.medical_history}}</p>
+
+    <!-- <p id="titles" *ngIf="petDetails.price !== null">Cost</p>
+    <p class="sampleText" *ngIf="petDetails.price !== null">Rs.{{petDetails.price}}</p> -->
+
+    <p id="titles">Address</p>
+    <p class="sampleText"><a (click)="redirectMap()" style="color: blue;">{{petDetails.address}}</a></p>
+
+
+    <div class="hl_details" *ngIf="paramId !== '2' && !petDetails.isAdopt && petDetails.userId !== userData.id"></div>
+    <div style="width: 100%;margin-top:-2%;height: 100px;" (click)="goToUserProfile(user); closeModal()"
+      *ngIf="paramId !== '2' && !petDetails.isAdopt && petDetails.userId !== userData.id">
+      <div style="width: 20%;float: left;">
+        <ion-avatar style="height:45px;width:45px;">
+          <ion-img *ngIf="user.profileImage === null" src="assets/img/profile_icon.png" style="margin: 50% 36%;">
+          </ion-img>
+          <ion-img *ngIf="user.profileImage !== null" [src]="user.profileImage" style="margin: 50% 36%;"></ion-img>
+        </ion-avatar>
+      </div>
+      <div style="width: 78%;float: left;margin-left:2%">
+        <p style="margin-top: 9%;font-size: 14px;color: #8e8e8e;">{{user.fullName}} <br /> Parent</p>
+      </div>
+    </div>
+    <div class="hl_details" *ngIf="petDetails.isAdopt"></div>
+    <div style="width: 100%;margin-top:-2%;height: 100px;" (click)="goToAdoptersProfile(petDetails.adopters_detail)"
+      *ngIf="petDetails.isAdopt">
+      <div style="width: 20%;float: left;">
+        <ion-avatar style="height:45px;width:45px;">
+          <ion-img src="assets/img/profile_icon.png" style="margin: 50% 36%;">
+          </ion-img>
+        </ion-avatar>
+      </div>
+      <div style="width: 78%;float: left;margin-left:2%">
+        <p style="margin-top: 8%;font-size: 14px;color: #8e8e8e;" *ngIf="petDetails.adopters_detail.fullName === null">
+          {{petDetails.adopters_detail.userName}}</p>
+        <p style="margin-top: 8%;font-size: 14px;color: #8e8e8e;" *ngIf="petDetails.adopters_detail.userName === null">
+          {{petDetails.adopters_detail.fullName}}</p>
+        <p style="margin-top: 8%;font-size: 14px;color: #8e8e8e;"
+          *ngIf="petDetails.adopters_detail.userName !== null && petDetails.adopters_detail.userName !== null">
+          {{petDetails.adopters_detail.fullName}}</p>
+        <p style="margin-top: 8%;font-size: 14px;color: #8e8e8e;" *ngIf="isShowInfo">
+          {{petDetails.adopters_detail.email}}</p>
+        <p style="margin-top: 8%;font-size: 14px;color: #8e8e8e;" *ngIf="isShowInfo">
+          {{petDetails.adopters_detail.phoneNumber}}</p>
+        <p style="margin-top:-6%;font-size: 14px;color: #8e8e8e;">Parent</p>
+      </div>
+    </div>
+  </ion-card>
+
+</ion-content>
+<ion-footer padding *ngIf="paramId !== '2' && petDetails.userId !== userData.id" style="background: white;" no-border>
+  <ion-button [disabled]="disableEnquiry" expand="block" id="blueButton" color="orange" (click)="makeEnquiry()">
+    {{disableEnquiry ? 'Enquiry Sent' : 'Make an Enquiry'}}</ion-button>
+</ion-footer>

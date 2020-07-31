@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+    <defs>
+        <style>
+            .cls-1{fill:#f96}.cls-2{fill:none}
+        </style>
+    </defs>
+    <g id="Group_55" data-name="Group 55" transform="translate(-213 -3011)">
+        <g id="Group_3477" data-name="Group 3477" transform="translate(-375 -41)">
+            <g id="Group_3476" data-name="Group 3476" transform="translate(-87 400)">
+                <path id="Path_32" d="M258.455 482.834h-3.111a1.244 1.244 0 0 0 0 2.489h3.111v21.152c0 1.559.963 3.111 2.488 3.111v-24.263a2.286 2.286 0 0 0-2.488-2.489z" class="cls-1" data-name="Path 32" transform="translate(435.9 2189.032)"/>
+                <path id="Path_33" d="M300.942 487.173l1.866-2.488-2.488-4.355-3.733-.622.622-2.488-4.355 2.488-1.866 6.221a20.565 20.565 0 0 0-16.175 19.908h23.018a3.834 3.834 0 0 0-2.488-3.733v-2.488a11.065 11.065 0 0 0 3.111-8.088 10.039 10.039 0 0 0-.622-3.733zm-3.111-4.355c0-.431.191-.622.622-.622s.622.191.622.622-.191.622-.622.622-.621-.191-.621-.622z" class="cls-1" data-name="Path 33" transform="translate(422.03 2192.78)"/>
+            </g>
+            <path id="Rectangle_17757" d="M0 0h64v64H0z" class="cls-2" data-name="Rectangle 17757" transform="translate(588 3052)"/>
+        </g>
+        <path id="Rectangle_17758" d="M0 0h64v64H0z" class="cls-2" data-name="Rectangle 17758" transform="translate(213 3011)"/>
+    </g>
+</svg>

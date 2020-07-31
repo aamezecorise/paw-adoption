@@ -1,0 +1,47 @@
+.toolbar {
+    box-shadow: 0px 1px 5px #888888;
+    --background:#6633cc;
+    height: 56px;
+    text-align: center;
+}
+#dropDownTitle {
+    font-size: 14px;
+    line-height: 16px; 
+    color: #000000;
+    margin-top:2%;
+}
+#startButton {
+    --border-radius: 0px !important;
+    --background: #ffffff !important;
+    height: 35px;
+    margin-top: 10%;
+    color: #6633cc;
+}
+.mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate {
+    background: #6633cc;
+}
+.mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate {
+    background: #6633cc;
+}
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #6633cc;
+}
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #6633cc;
+}
+.ionic-selectable-cover:focus{
+    // border: none;
+    outline: none
+} 
+.itemSelect1{
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 0.5rem 0 0.5rem 0;
+    margin-top:3%;
+}
+.itemSelect{
+    border: 2px solid #6633cc;
+    border-radius: 5px;
+    padding: 0.5rem 0 0.5rem 0;
+    margin-top:3%;
+}

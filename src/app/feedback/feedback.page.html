@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar class="toolBar">
+    <ion-icon (click)="navigateBack()" src="assets/icon/_ionicons_svg_md-arrow-back.svg" slot="start"
+      style="margin-left: 10px;font-size: 24px;float: right;word-spacing: 3px;margin-top: 0%;color: white">
+    </ion-icon>
+    <ion-title style="font-family: Roboto-Regular;font-size:20px;line-height: 24px;color: white;
+    text-align: center;margin-top: 0%;margin-right:10%">
+      Help and Feedback</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid style="margin-top: 10px;">
+    <ion-row>
+      <ion-col size="12">
+        <div class="relPos upInputs">
+          <textarea class="floating-label_input" type="text" placeholder="Please type your concern over here..."
+            [(ngModel)]="feedback"></textarea>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div style="text-align: center;padding-left:10px;">
+    <ion-button expand="block" id="blueButton1" color="orange" (click)="submitFeedback()"
+      [disabled]="feedback === null || feedback === ''">
+      <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner> {{!isLoading ? 'Submit':''}}
+    </ion-button>
+  </div>
+</ion-content>

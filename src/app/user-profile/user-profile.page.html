@@ -1,0 +1,177 @@
+<ion-header>
+  <ion-toolbar class="header-toolbar">
+  <ion-buttons slot="start" style="float: left;color: #ffffff">
+    <ion-icon (click)="goBack()" src="assets/icon/_ionicons_svg_md-arrow-back.svg" slot="start"
+      style="margin-left: 10px;font-size: 28px;float: right;"></ion-icon>
+  </ion-buttons>
+  <p style="text-align: center;font-size: 16px;color:#ffffff;margin:0;font-weight: bold;margin-right: 18px;">
+    @{{userData.userName}}</p>
+  <ion-icon src="assets/icon/_ionicons_svg_md-more.svg" (tap)="presentPopover1($event)"
+    style="margin-right: 14px;font-size: 24px;float: right;color: #ffffff" slot="end"></ion-icon>
+  </ion-toolbar>
+  <div style="width:100%;">
+    <ion-avatar style="height:100px;width:100px;margin: 16% auto">
+      <ion-img *ngIf="userData.profileImage == null" src="assets/img/profile_icon.png"></ion-img>
+      <ion-img *ngIf="userData.profileImage !== null" [src]="userData.profileImage"></ion-img>
+    </ion-avatar>
+    <div style="margin-top: -12%;">
+      <p style="text-align: center;font-size: 24px;line-height: 29px;color:#000000">
+        {{userData.fullName}}</p>
+      <!-- <p style="text-align: center;font-size: 14px;line-height: 18px;color:#000000;margin-top: -10px;">
+        {{userData.userName}}</p> -->
+    </div>
+    <ion-segment style="margin-top:10px;--background: transparent !important" color="orange"
+      [(ngModel)]="selectSections.selectedSection">
+      <ion-segment-button id="segmentButton" value="{{selectSections.About}}">
+        About
+      </ion-segment-button>
+      <ion-segment-button id="segmentButton" value="{{selectSections.SavedPets}}" (click)="getSavedPets()">
+        My Pets
+      </ion-segment-button>
+      <ion-segment-button id="segmentButton" value="{{selectSections.Adopted}}" (click)="getAdoptedPets()">
+        Adopted
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+</ion-header>
+
+<ion-content style="background-color:#f6f6f6;">
+  <div [ngSwitch]="selectSections.selectedSection">
+    <div *ngSwitchCase="'About'" padding>
+      <div>
+        <p id="sampleText">{{userData.about_ngo}}
+        </p>
+      </div>
+      <div *ngIf="isShow">
+        <div *ngIf="userData.isNgo">
+          <ion-icon src="assets/icon/_ionicons_svg_md-globe.svg" style="color: #000000;font-size: 23px;"></ion-icon>
+          <p>{{userData.website}}</p>
+        </div>
+        <div>
+          <ion-icon name="mail" style="color: #000000;font-size: 23px;"></ion-icon>
+          <p>{{userData.email}}</p>
+        </div>
+        <div *ngIf="userData.phoneNumber !== null">
+          <ion-icon name="call" style="color: #000000;font-size: 23px;"></ion-icon>
+          <p>{{userData.phoneNumber}}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngSwitchCase="'SavedPets'">
+      <div *ngIf="isLoading" style="width:100%;text-align: center; margin-top: 50%;">
+        <ion-spinner *ngIf="isLoading" name="crescent" id="pageLoader" color="orange" style="height: 64px;width: 64px">
+        </ion-spinner>
+      </div>
+     
+      <ion-card style="border-radius: 8px;" *ngFor="let item of savedPetsList">
+        <ion-card-header style="height: 52px;">
+          <ion-toolbar style="margin-top: -20px;">
+            <ion-card-title class="petName_Card" slot="start">{{item.primary_breed}}</ion-card-title>
+            <!-- <ion-icon (click)="presentPopover($event, item)" src="assets/icon/_ionicons_svg_md-more.svg"
+              style="font-size: 25px" slot="end"></ion-icon> -->
+          </ion-toolbar>
+        </ion-card-header>
+        <ion-card-content (click)="viewDetails(item)">
+          <div style="width:100%;margin-top:0%;height: 100%;">
+            <div style="float: left;width: 40%;height: 100%;margin-bottom: 15px;">
+              <div style="width: 100%;height: 100%;">
+                <ion-avatar *ngIf="platform === 'android'" style="width:13ch;height:13ch;margin: 0ch auto">
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+                </ion-avatar>
+                <ion-avatar *ngIf="platform === 'ios'" style="width:14ch;height:14ch;margin: 0ch auto">
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+                </ion-avatar>
+              </div>
+              <div style="width: 100%;text-align: center;margin-top: 5px;">
+                <p >{{petName(item.petName)}}</p>
+              </div>
+            </div> 
+            <div class="vl2" style="float: left;width: 0.5px;height: 16ch;margin-left: 5%;"></div>
+            <div style="float: left;width: 50%;height: 100%;padding-bottom: 5%;">
+              <div style="width: 100%;height: 45%;">
+                <ion-row>
+                  <ion-col col-4 id="heading">AGE</ion-col>
+                  <ion-col col-8 id="values">{{petAge(item.birthday)}} M</ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 5%;">
+                  <ion-col col-4 id="heading">GENDER</ion-col>
+                  <ion-col col-8 id="values">{{petGender(item.gender)}}</ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 5%;">
+                  <ion-col col-4 id="heading">WEIGHT</ion-col>
+                  <ion-col col-8 id="values">{{item.weight}} Kg</ion-col>
+                </ion-row>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+    <div *ngSwitchCase="'Adopted'">
+      <div *ngIf="isLoading" style="width:100%;text-align: center; margin-top: 50%;">
+        <ion-spinner *ngIf="isLoading" name="crescent" id="pageLoader" color="orange" style="height: 64px;width: 64px">
+        </ion-spinner>
+      </div>
+
+      <ion-card style="border-radius: 8px;" *ngFor="let item of adoptedPetsList">
+        <ion-card-header style="height: 52px;">
+          <ion-toolbar style="margin-top: -20px;">
+            <ion-card-title class="petName_Card" slot="start">{{item.primary_breed}}</ion-card-title>
+            <ion-icon (click)="presentPopover($event, item)" src="assets/icon/_ionicons_svg_md-more.svg"
+              style="font-size: 25px" slot="end"></ion-icon>
+          </ion-toolbar>
+        </ion-card-header>
+        <ion-card-content (click)="viewDetails(item)">
+          <div style="width:100%;margin-top:0%;height: 100%;">
+            <div style="float: left;width: 40%;height: 100%;margin-bottom: 15px;">
+              <div style="width: 100%;height: 100%;">
+                <ion-avatar *ngIf="platform === 'android'" style="width:13ch;height:13ch;margin: 0ch auto">
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+                </ion-avatar>
+                <ion-avatar *ngIf="platform === 'ios'" style="width:14ch;height:14ch;margin: 0ch auto">
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                  <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+                </ion-avatar>
+              </div>
+              <div style="width: 100%;text-align: center;margin-top: 5px;">
+                <p >{{petName(item.petName)}}</p>
+              </div>
+            </div> 
+            <div class="vl2" style="float: left;width: 0.5px;height: 16ch;margin-left: 5%;"></div>
+            <div style="float: left;width: 50%;height: 100%;padding-bottom: 5%;">
+              <div style="width: 100%;height: 45%;">
+                <ion-row>
+                  <ion-col col-4 id="heading">AGE</ion-col>
+                  <ion-col col-8 id="values">{{petAge(item.birthday)}} M</ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 5%;">
+                  <ion-col col-4 id="heading">GENDER</ion-col>
+                  <ion-col col-8 id="values">{{petGender(item.gender)}}</ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 5%;">
+                  <ion-col col-4 id="heading">WEIGHT</ion-col>
+                  <ion-col col-8 id="values">{{item.weight}} Kg</ion-col>
+                </ion-row>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

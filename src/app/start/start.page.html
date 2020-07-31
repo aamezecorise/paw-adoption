@@ -1,0 +1,31 @@
+<ion-header no-border>
+  <ion-toolbar no-border>
+    <ion-buttons slot="start" style="float: left;color: #888888;margin-left: 10px;font-size: 16px" (click)="dismiss()">
+      Cancel
+    </ion-buttons>
+    <ion-title style="font-size:20px;line-height: 24px;color: #888888;text-align: center;">
+    </ion-title>
+    <ion-buttons slot="end" style="float: left;color: #888888;font-size: 16px; margin-right: 10px"
+      (click)="saveLocation()">Done
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-searchbar [(ngModel)]="autocomplete" (keyup)="updateSearchResults($event.target.value)"
+    placeholder="Search for a place"></ion-searchbar>
+  <ion-list [hidden]="autocompleteItems.length == 0">
+    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+      {{ item.description }}
+    </ion-item>
+  </ion-list>
+    <div class="centerMarker">
+      <img src="assets/icon/marker.png" />
+    </div>
+    <div #map id="map">
+    </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="tryGeolocation()" class="fabButton" color="light">
+      <ion-icon name="locate"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

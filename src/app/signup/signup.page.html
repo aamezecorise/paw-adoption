@@ -1,0 +1,194 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start" style="margin-left: 10px;color: #ffffff">
+      <ion-icon color="orange" ion-button src="assets/icon/_ionicons_svg_md-arrow-back.svg" style="font-size: 30px"
+        (click)="!isNext ? navigateBack() : clickPrev()"> </ion-icon>
+      <!-- <ion-icon *ngIf="activeIndex == 1" color="orange" ion-button src="assets/icon/_ionicons_svg_md-arrow-back.svg" style="font-size: 30px"
+          (click)="clickPrev()">
+        </ion-icon> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form class="form-md" [formGroup]="signUpForm">
+    <div>
+      <div *ngIf="!isNext" class="divFirst">
+        <ion-row>
+          <ion-col col-12>
+            <h1>Hello Friend</h1>
+            <p style="font-size: 16px;line-height: 21px;color: #8e8e8e">Create an Account
+            </p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col col-12>
+            <div style="width:80%;float: left; text-align: left;color: #9597a6;font-size: 16px;padding-left: 5%">
+              Add this is an NGO/NPO account
+            </div>
+            <div style="width:20%;float: left;margin-top: -1%;">
+              <ion-toggle color="orange" checked="{{isToggle}}" (ionChange)="changeToggle($event)"></ion-toggle>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <input #phoneInput id="phoneInput" class="floating-label_input" type="number" required placeholder=" "
+                  [formControl]="signUpForm.controls['phoneNumber']" (input)=_keyPress($event.target.value)>
+                <label class="upLabel">&nbsp;&nbsp;Phone Number&nbsp;&nbsp;</label>
+                <mat-error *ngIf="hasError('phoneNumber', 'pattern')"></mat-error>
+              </div>
+            </ion-col>
+
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <input class="floating-label_input" type="text" name="email" required placeholder=" "
+                  [formControl]="signUpForm.controls['email']" (input)="OnChangeInput($event.target.value)" (keyup)="check_mail_exists_or_not($event.target.value)">
+                <label class="upLabel">&nbsp;&nbsp;Email ID&nbsp;&nbsp;</label>
+                <mat-error
+                  *ngIf="hasError('email', 'pattern') || hasError('email', 'required') || emailFlag == 1 || hasError('email', 'touched')">
+                </mat-error>
+                <mat-icon matSuffix class="EyeMain">
+                  <ion-icon *ngIf="hasError('email', 'pattern') || emailFlag == 1" end name="alert" style="font-size: 24px;color: red"></ion-icon>
+                  <ion-icon *ngIf="!signUpForm.controls['email'].invalid && emailFlag == 0" end name="checkmark-circle" style="font-size: 24px; color: green"></ion-icon>
+                </mat-icon>
+              </div>
+            </ion-col>
+
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <input class="floating-label_input" type="{{type}}" name="password"
+                  [formControl]="signUpForm.controls['password']" required placeholder=" " (input)=_keyPressPwd($event.target.value)>
+                <label class="upLabel">&nbsp;&nbsp;Password&nbsp;&nbsp;</label>
+                <mat-icon matSuffix class="EyeMain">
+                  <ion-icon *ngIf="!pwdToggle" end name="eye" class="EyeIcon" style="margin-top: 2px;" (click)="togglePassword()"></ion-icon>
+                  <ion-icon *ngIf="pwdToggle" end name="eye-off" class="EyeIcon" style="margin-top: 2px;" (click)="togglePassword()"></ion-icon>
+                </mat-icon>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <input class="floating-label_input" type="text" name="fullname"
+                  [formControl]="signUpForm.controls['fullName']" (keyup.enter)="hideKeyboard()" required
+                  placeholder=" ">
+                <label *ngIf="isToggle" class="upLabel">&nbsp;&nbsp;Organization Name&nbsp;&nbsp;</label>
+                <label *ngIf="!isToggle" class="upLabel">&nbsp;&nbsp;Fullname&nbsp;&nbsp;</label>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <div *ngIf="isNext" class="divSceond">
+        <ion-avatar style="height:100px;width:100px;border:1px solid #6633cc;margin:0 auto"
+          (click)="selectFile('profile')">
+          <ion-img *ngIf="base64Image == null" src="assets/img/profile_icon.png"></ion-img>
+          <ion-img *ngIf="base64Image !== null" [src]="base64Image"></ion-img>
+          <div style="float: right;margin: -56px -8px;">
+            <ion-icon name="add-circle" color="orange"
+              style="background-color: #fff;font-size: 16px;border-radius: 8px;"></ion-icon>
+          </div>
+        </ion-avatar>
+        <p style="color:#78849e;font-size: 14px;line-height: 18px;margin-top:10px;text-align: center">Add
+          Profile Photo</p>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" *ngIf="isToggle">
+              <div class="relPos upInputs">
+                <input class="floating-label_input" type="text" required placeholder=" "
+                  [formControl]="signUpForm.controls['website']">
+                <label class="upLabel">&nbsp;&nbsp;Website&nbsp;&nbsp;</label>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <input class="floating-label_input" type="text" placeholder=" "
+                  (input)="OnChangeInput2($event.target.value)" (keyup)="removeSpace($event.target.value)"
+                  [formControl]="signUpForm.controls['userName']"
+                  (keyup)="check_username_exists_or_not($event.target.value)">
+                <label class="upLabel" style="font-size: 14px;margin-top: -4px;">&nbsp;&nbsp;Username&nbsp;&nbsp;</label>
+                <mat-error
+                  *ngIf="hasError('userName', 'pattern') || hasError('userName', 'required') || usernameFlag == 1">
+                </mat-error>
+                <mat-icon matSuffix class="EyeMain">
+                  <ion-icon *ngIf="hasError('userName', 'pattern') || usernameFlag == 1" end name="alert" style="font-size: 24px;color: red"></ion-icon>
+                  <ion-icon *ngIf="!signUpForm.controls['userName'].invalid && usernameFlag == 0" end name="checkmark-circle" style="font-size: 24px; color: green"></ion-icon>
+                </mat-icon>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <textarea class="floating-label_input" type="text" placeholder=" " [formControl]="signUpForm.controls['about_ngo']"></textarea>
+                  <label class="upLabel" style="font-size: 14px;">&nbsp;&nbsp;Bio&nbsp;&nbsp;</label>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- <div style="width:100%;text-align: left">
+          <mat-label class="labels">Identification</mat-label>
+          <div style="margin-top:3%;padding-left: 10px;">
+            <mat-radio-group aria-label="Select an option" [formControl]="signUpForm.controls['identification']"
+              name="identification" (change)="radioChange($event)">
+              <mat-radio-button value="1" style="font-size: 14px;">Aadhar
+                Card
+              </mat-radio-button>
+              <mat-radio-button value="2" style="margin-left: 40px;font-size: 14px;">
+                Pan Card</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div> -->
+        <!-- <div *ngIf="signUpForm.controls['identification'].value !== null" style="width:97%;margin-top:5%;text-align: left;padding-left: 10px;">
+          <label>*This information is mandatory.</label>
+          <br />
+          <label class="labels" *ngIf="signUpForm.controls['identification'].value == '1'">Enter Aadhar Number</label>
+          <div style="display: flex;padding-bottom: 5%;" *ngIf="signUpForm.controls['identification'].value === '1'">
+            <input id="box1"  style="padding: 20px 0px 12px 0px;" type="number" maxlength="4" [formControl]="signUpForm.controls['field1']" (input)=field1Kepress($event.target.value)>
+            <input id="box2"  style="padding: 20px 0px 12px 0px;" type="number" maxlength="4" [formControl]="signUpForm.controls['field2']" (input)=field2Kepress($event.target.value)>
+            <input id="box3"  style="padding: 20px 0px 12px 0px;" type="number" maxlength="4" [formControl]="signUpForm.controls['field3']" (input)=field3Kepress($event.target.value) (keyup.enter)="hideKeyboard()">
+          </div>
+          <ion-row *ngIf="signUpForm.controls['identification'].value == '2'">
+            <ion-col size="12">
+              <div class="relPos upInputs">
+                <input class="floating-label_input" type="text" required placeholder="e.g AAAAA0000A"
+                [formControl]="signUpForm.controls['pan_number']" (keyup.enter)="hideKeyboard()"
+                (input)="pancardValidation($event.target.value)" (input)="_kepress4($event.target.value)">
+                <label class="upLabel">&nbsp;&nbsp;Pan Number&nbsp;&nbsp;</label>
+              </div>
+            </ion-col>
+          </ion-row>
+          <div *ngIf="base64Identity === null" [ngClass]="isClick ? 'selectBox1' : 'selectBox'" (click)="selectFile('identity')">
+            <p class="label1">{{signUpForm.controls['identification'].value == '1' ? 'Upload Aadhar Card Photo' : 'Upload Pan Card Photo'}} </p>
+          </div>
+          <div *ngIf="base64Identity !== null" class="identityPreview">
+              <ion-icon name="close-circle" class="closeIcon1" (tap)="removePhoto()"></ion-icon>
+            <ion-img [src]="base64Identity" height="250"></ion-img>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </form>
+</ion-content>
+<ion-footer no-border padding *ngIf="keyboardCheck()" style="background: white;">
+  <div *ngIf="isNext">
+    <!-- <ion-button [disabled]="(signUpForm.controls['pan_number'].value === null || signUpForm.controls['pan_number'].invalid || signUpForm.controls['userName'].invalid) &&
+    (signUpForm.controls['aadhar_number'].value === null || signUpForm.controls['aadhar_number'].value.length < 13 || signUpForm.controls['userName'].invalid)" expand="block" id="blueButton" color="orange" (click)="createProfile()">
+      <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner> {{!isLoading ? 'Sign Up':''}}
+    </ion-button> -->
+    <ion-button [disabled]="signUpForm.controls['userName'].invalid" expand="block" id="blueButton" color="orange" (click)="signUp()">
+      <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner> {{!isLoading ? 'Sign Up':''}}
+    </ion-button>
+    <!-- <p *ngIf="!isToggle" style="width: 100%;text-align: center;font-size:10px;line-height: 18px;color:#8e8e8e">
+      By signing up, you agree to the <a style="color: #0066cc" href="https://www.pawzeeble.com/terms.html">Terms</a>
+      and <a style="color: #0066cc" href="https://www.pawzeeble.com/privacy.html">Privacy
+        Policy</a></p> -->
+    <p style="width: 100%;text-align: center;font-size:10px;line-height: 18px;color:#8e8e8e">
+      By clicking on sign up, you are agreeing to <a style="color: #0066cc" href="http://ec2-3-7-46-127.ap-south-1.compute.amazonaws.com/licenseagreement.html">End User's License Agreement</a></p>
+  </div>
+  <ion-toolbar *ngIf="!isNext">
+    <ion-button expand="block"
+      [disabled]="signUpForm.controls['email'].value === null || signUpForm.controls['email'].invalid || signUpForm.controls['phoneNumber'].invalid  || signUpForm.controls['password'].value === null || signUpForm.controls['fullName'].value === null"
+      id="blueButton" color="orange" (click)="clickNext()">Next</ion-button>
+  </ion-toolbar>
+</ion-footer>

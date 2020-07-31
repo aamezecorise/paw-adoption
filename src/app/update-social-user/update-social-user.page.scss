@@ -1,0 +1,62 @@
+.selectBox {
+    width: 100%;
+    height:59.5px;
+    border:1px solid rgba(0,0,0,.12);
+    border-radius: 5px;
+}
+.selectBox1 {
+    width: 100%;
+    height:59.5px;
+    border:2px solid #6633cc;
+    border-radius: 5px;
+}
+.identityPreview {
+    width: 100%;
+    height:200px;
+    border:1px solid rgba(0,0,0,.12);
+    border-radius: 5px;
+}
+.label1 {
+    font-size: 14px;
+    color: #8e8e8e;
+    font-family: Roboto-Regular;
+    margin-top: 20px;
+    margin-left: 12px;
+}
+.closeIcon2 {
+    position: absolute;
+    color: #6633cc;
+    margin-top: -11px;
+    margin-left: 87%;
+    background-color: #fff;
+    font-size: 30px;
+    border-radius: 15px;
+}
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #6633cc;
+}
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #6633cc;
+}
+#box1{
+    width: 30%;
+    margin-left: 10px;
+    height: 52px;
+    border-radius: 5px;
+    text-align: center;
+}
+#box2{
+    width: 30%;
+    margin-left: 10px;
+    height: 52px;
+    border-radius: 5px;
+    text-align: center;
+    
+}
+#box3{
+    width: 30%;
+    margin-left: 10px;
+    height: 52px;
+    border-radius: 5px;
+    text-align: center;
+}

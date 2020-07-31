@@ -1,0 +1,310 @@
+<ion-header style="background: #f6f6f6;">
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start" style="float: left;">
+      <ion-menu-button style="color: white;"></ion-menu-button>
+    </ion-buttons>
+    <ion-title (click)="scrolltoTop()" [ngClass]="platform === 'ios' ? 'titleIos' : 'titleAndroid'">
+      {{paramId == 1 ? 'Pet Profile List' : 'Dashboard'}}
+    </ion-title>
+    <ion-buttons slot="end" (click)="seeNotification()">
+
+      <ion-icon *ngIf="platform === 'android' && notification_count == 0 && !apiService.isNotification"
+        src="assets/icon/round_notifications_24_px.svg" slot="end"
+        style="margin-right: 20px;font-size: 25px;float: right;">
+      </ion-icon>
+      <ion-icon *ngIf="platform === 'ios' && notification_count == 0 && !apiService.isNotification"
+        src="assets/icon/round_notifications_24_px.svg" slot="end"
+        style="margin-right: 20px;font-size: 25px;float: right;margin-top: 9px;">
+      </ion-icon>
+      <ion-icon *ngIf="notification_count > 0 || (apiService.isNotification && notification_count == 0)"
+        src="assets/icon/round_notifications_24_px.svg" slot="end"
+        style="margin-right: -12px;font-size: 25px;float: right;margin-top: 0%;">
+      </ion-icon>
+      <ion-icon *ngIf="notification_count > 0 || (apiService.isNotification && notification_count == 0)"
+        src="assets/icon/circle.svg" slot="end" style="font-size:11px;float: right;margin-top: -32%; 
+  color: #ff9966;margin-right: 12px;"></ion-icon>
+    </ion-buttons>
+
+    <ion-buttons (click)="seeChatlist()" slot="end">
+       <ion-icon src="assets/icon/chatbubble.svg" style="color:#fff; margin-right: 20px;font-size: 25px;float: right;"></ion-icon>
+       
+       <ion-icon *ngIf="isFalse" src="assets/icon/circle.svg" slot="end" style="font-size:11px;float: right;margin-top: -32%; margin-left: -20px; color: #ff9966; margin-right: 5px;"></ion-icon>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+  <ion-searchbar placeholder="Search by Pet Name" (keyup)="searchfilter($event)" animated></ion-searchbar>
+</ion-header>
+<ion-content>
+  <ion-refresher slot="fixed" pullFactor="0.2" (ionRefresh)="refresher($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="crescent"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+    </ion-refresher>
+
+    
+  
+<!--   <div *ngIf="isLoading" style="width:100%;height:100px;text-align: center; margin-top: 70%;">
+    <ion-spinner *ngIf="isLoading" name="crescent" id="pageLoader" color="orange" style="height: 64px;width: 64px">
+    </ion-spinner>
+  </div> -->
+  <div *ngIf="showEmptyMsg" style="width:100%;height:100px;text-align: center; margin-top: 70%;">
+    <p style="font-size: 24px;color: #6633cc;">No pets found in your area..!!</p>
+  </div>
+
+  <div *ngFor="let item of adoptionList">
+
+
+        <!-- <div *ngIf="data"> -->
+        <ion-card *ngIf="data" style="border-radius: 8px;">
+          <ion-card-header style="height: 52px;">
+            <ion-toolbar style="margin-top: -20px;">
+              <ion-card-title class="petName_Card" slot="start"><ion-skeleton-text animated></ion-skeleton-text></ion-card-title>
+            </ion-toolbar>
+          </ion-card-header>
+          <ion-card-content>
+            <div style="width:100%;margin-top:0%;height: 100%;">
+              <div style="float: left;width: 40%;height: 100%;margin-bottom: 15px;">
+                <div style="width: 100%;height: 100%;">
+                  <ion-thumbnail style="width:13ch;height:13ch;margin: 0ch auto" slot="start">
+                          <ion-skeleton-text animated></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <!-- <ion-avatar style="width:13ch;height:13ch;margin: 0ch auto">
+                    <ion-img><ion-skeleton-text animated></ion-skeleton-text></ion-img>
+                  </ion-avatar> -->
+                </div>
+              </div> 
+              <div class="vl2" style="float: left;width: 0.5px;height: 16ch;margin-left: 5%;"></div>
+              <div style="float: left;width: 50%;height: 100%;padding-bottom: 5%;">
+                <div style="width: 100%;height: 45%;">
+                  <ion-row>
+                    <ion-col col-12 id="heading"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+                  </ion-row>
+                  <ion-row style="margin-top: 5%;">
+                    <ion-col col-12 id="heading"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+                  </ion-row>
+                  <ion-row style="margin-top: 5%;">
+                    <ion-col col-12 id="heading"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+                  </ion-row>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+    <!-- </div> -->
+    <!-- <ion-card style="border-radius: 2px;">
+      <ion-card-header style="height: 52px;">
+        <ion-toolbar style="margin-top: -20px;">
+          <ion-card-title class="petName_Card" slot="start">{{petName(item.petName)}}</ion-card-title>
+          <ion-icon (click)="presentPopover($event, item)" src="assets/icon/_ionicons_svg_md-more.svg"
+            style="font-size: 25px" slot="end"></ion-icon>
+        </ion-toolbar>
+      </ion-card-header>
+      <ion-card-content (click)="viewDetails(item)">
+        <div style="width:100%;margin-top:0%;height: 100%;">
+          <div style="float: left;width: 40%;height: 100%;">
+            <div style="width: 100%;height: 100%;">
+              <ion-avatar *ngIf="platform === 'android'" style="width:15ch;height:15ch;margin: 1ch auto">
+                <ion-img *ngIf="item.profileImage === null" src="assets/img/pet_profile.png"></ion-img>
+                <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+              </ion-avatar>
+              <ion-avatar *ngIf="platform === 'ios'" style="width:14ch;height:14ch;margin: 1ch auto">
+                <ion-img *ngIf="item.profileImage === null" src="assets/img/pet_profile.png"></ion-img>
+                <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+              </ion-avatar>
+            </div>
+          </div>
+          <div style="float: left;width: 60%;height: 100%;padding-bottom: 5%;">
+            <div style="width: 100%;height: 45%;">
+              <ion-row>
+                <ion-col col-6 id="heading">BREED</ion-col>
+                <div class="vl"></div>
+                <ion-col col-6 id="heading">AGE</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-6 id="values">{{item.primary_breed}}</ion-col>
+                <div class="vl"></div>
+                <ion-col col-6 id="values">{{petAge(item.birthday)}} M</ion-col>
+              </ion-row>
+            </div>
+            <div style="height: 10%;margin-top:2%">
+              <ion-row>
+                <ion-col col-6>
+                  <div class="hl"></div>
+                </ion-col>
+                <ion-col col-6>
+                  <div class="hl"></div>
+                </ion-col>
+              </ion-row>
+            </div>
+            <div style="width: 100%;height: 45%;margin-top: 3%">
+              <ion-row>
+                <ion-col col-6 id="heading">WEIGHT</ion-col>
+                <div class="vl"></div>
+                <ion-col col-6 id="heading">GENDER</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-6 id="values">{{item.weight}} Kg</ion-col>
+                <div class="vl"></div>
+                <ion-col col-6 id="values">{{petGender(item.gender)}}</ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card> -->
+
+    <!-- <ion-card style="border-radius: 2px;">
+      <ion-card-header style="height: 52px;">
+        <ion-toolbar style="margin-top: -20px;">
+          <ion-card-title class="petName_Card" slot="start">{{item.primary_breed}}</ion-card-title>
+          <ion-icon (click)="presentPopover($event, item)" src="assets/icon/_ionicons_svg_md-more.svg"
+            style="font-size: 25px" slot="end"></ion-icon>
+        </ion-toolbar>
+      </ion-card-header>
+      <ion-card-content (click)="viewDetails(item)">
+        <div style="width:100%;margin-top:0%;height: 100%;">
+          <div style="float: left;width: 40%;height: 100%;margin-bottom: 30px;">
+            <div style="width: 15ch;height: 15ch;">
+                <img *ngIf="item.profileImage === null" src="assets/img/pet_profile.png" style="border-radius: 5px;">
+                <img *ngIf="item.profileImage !== null" [src]="item.profileImage" style="border-radius: 5px;">
+            </div>
+            <div style="width: 15ch;text-align: center;background-color: #6633cc;margin-top: -10px;position: absolute;    border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;">
+              <p style="color: #fff;
+              font-weight: bold;">{{petName(item.petName)}}</p>
+            </div>
+          </div> 
+          <div class="vl2" style="float: left;width: 0.5px;height: 17ch;margin-left: 5%;"></div>
+          <div style="float: left;width: 50%;height: 100%;padding-bottom: 5%;">
+            <div style="width: 100%;height: 45%;">
+              <ion-row>
+                <ion-col col-4 id="heading">AGE</ion-col>
+                <ion-col col-8 id="values">{{petAge(item.birthday)}} M</ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 5%;">
+                <ion-col col-4 id="heading">GENDER</ion-col>
+                <ion-col col-8 id="values">{{petGender(item.gender)}}</ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 5%;">
+                <ion-col col-4 id="heading">WEIGHT</ion-col>
+                <ion-col col-8 id="values">{{item.weight}} Kg</ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card> -->
+    <!-- <ion-card style="border-radius: 2px;">
+      <ion-card-header style="height: 52px;">
+        <ion-toolbar style="margin-top: -20px;">
+          <ion-card-title class="petName_Card" slot="start">{{item.primary_breed}}</ion-card-title>
+          <ion-icon (click)="presentPopover($event, item)" src="assets/icon/_ionicons_svg_md-more.svg"
+            style="font-size: 25px" slot="end"></ion-icon>
+        </ion-toolbar>
+      </ion-card-header>
+      <ion-card-content (click)="viewDetails(item)">
+        <div style="width:100%;margin-top:0%;height: 100%;">
+          <div style="float: left;width: 40%;height: 100%;margin-bottom: 40px;">
+            <div style="width: 13ch;height: 13ch;">
+                <img *ngIf="item.profileImage === null" src="assets/img/pet_profile.png" style="border-radius:5px">
+                <img *ngIf="item.profileImage !== null" [src]="item.profileImage" style="border-radius:5px">
+            </div>
+            <div style="width: 13ch;text-align: center;margin-top: 5px;position: absolute;">
+              <p >{{petName(item.petName)}}</p>
+            </div>
+          </div> 
+          <div class="vl2" style="float: left;width: 0.5px;height: 15ch;margin-left: 5%;"></div>
+          <div style="float: left;width: 50%;height: 100%;padding-bottom: 5%;">
+            <div style="width: 100%;height: 45%;">
+              <ion-row>
+                <ion-col col-4 id="heading">AGE</ion-col>
+                <ion-col col-8 id="values">{{petAge(item.birthday)}} M</ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 5%;">
+                <ion-col col-4 id="heading">GENDER</ion-col>
+                <ion-col col-8 id="values">{{petGender(item.gender)}}</ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 5%;">
+                <ion-col col-4 id="heading">WEIGHT</ion-col>
+                <ion-col col-8 id="values">{{item.weight}} Kg</ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card> -->
+    <ion-card *ngIf="!data" style="border-radius: 8px;">
+      <ion-card-header style="height: 52px;">
+        <ion-toolbar style="margin-top: -20px;">
+          <ion-card-title class="petName_Card" slot="start">{{item.primary_breed}}</ion-card-title>
+          <ion-icon (click)="presentPopover($event, item)" src="assets/icon/_ionicons_svg_md-more.svg"
+            style="font-size: 25px" slot="end"></ion-icon>
+        </ion-toolbar>
+      </ion-card-header>
+      <ion-card-content (click)="viewDetails(item)">
+        <div style="width:100%;margin-top:0%;height: 100%;">
+          <div style="float: left;width: 40%;height: 100%;margin-bottom: 15px;">
+            <div style="width: 100%;height: 100%;">
+              <ion-avatar *ngIf="platform === 'android'" style="width:13ch;height:13ch;margin: 0ch auto">
+                <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+              </ion-avatar>
+              <ion-avatar *ngIf="platform === 'ios'" style="width:14ch;height:14ch;margin: 0ch auto">
+                <ion-img *ngIf="item.profileImage === null && item.category === 'dog'" src="assets/icon/dog_gray.svg"></ion-img>
+                <ion-img *ngIf="item.profileImage === null && item.category === 'cat'" src="assets/icon/cat_gray.svg"></ion-img>
+                <ion-img *ngIf="item.profileImage === null && item.category === 'bird'" src="assets/icon/bird_gray.svg"></ion-img>
+                <ion-img *ngIf="item.profileImage !== null" [src]="item.profileImage"></ion-img>
+              </ion-avatar>
+            </div>
+            <div style="width: 100%;text-align: center;margin-top: 5px;">
+              <p >{{petName(item.petName)}}</p>
+            </div>
+          </div> 
+          <div class="vl2" style="float: left;width: 0.5px;height: 16ch;margin-left: 5%;"></div>
+          <div style="float: left;width: 50%;height: 100%;padding-bottom: 5%;">
+            <div style="width: 100%;height: 45%;">
+              <ion-row>
+                <ion-col col-4 id="heading">AGE</ion-col>
+                <ion-col col-8 id="values">{{petAge(item.birthday)}} M</ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 5%;">
+                <ion-col col-4 id="heading">GENDER</ion-col>
+                <ion-col col-8 id="values">{{petGender(item.gender)}}</ion-col>
+              </ion-row>
+              <ion-row style="margin-top: 5%;">
+                <ion-col col-4 id="heading">WEIGHT</ion-col>
+                <ion-col col-8 id="values">{{item.weight}} Kg</ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content  loadingSpinner="crescent" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentModal()" *ngIf="paramId == 1" color="orange" class="fabButton">
+      <ion-icon name="options"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button (click)="nevigateToAdd()" *ngIf="paramId == 2" color="orange" class="fabButton">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+
+
+
+
+
+
+
+
+  <div id="poiDiv"></div>
+</ion-content>

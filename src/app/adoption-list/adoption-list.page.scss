@@ -1,0 +1,59 @@
+/* Custom Skeleton Line Height and Margin */
+.custom-skeleton ion-skeleton-text {
+  line-height: 13px;
+}
+
+.custom-skeleton ion-skeleton-text:last-child {
+  margin-bottom: 5px;
+}
+
+.toolbar {
+    box-shadow: 0px 1px 5px #888888;
+    --background:#6633cc;
+    height: 56px;
+    text-align: center;
+}
+#heading {
+    color: #8e8e8e;
+    text-align: left;
+    font-size: 12px;
+    margin-left: 10px;
+}
+#values {
+    color: #454545;
+    text-align: left;
+    font-size: 14px;
+}
+ion-card {
+    background: #ffffff;
+    margin-top: 10px;
+    margin-bottom: 12px;
+}
+.scroll-content {
+    margin-bottom: 0!important;
+  }
+
+  ion-footer {
+    &.footer-md::before {
+        background-image: none;
+    }
+}
+.fabButton{
+    margin: 0% 0% 50% -20%;
+    height: 9vh;
+    width: 9vh;
+}
+.titleIos{
+    font-size:20px;
+    line-height: 26px;
+    color:#ffffff;
+    margin-top:5px;
+}
+.titleAndroid {
+    font-size:20px;
+    line-height: 26px;
+    color:#ffffff;
+}
+.refresher-pulling-icon, .refresher-refreshing-icon{
+    color: red
+  }

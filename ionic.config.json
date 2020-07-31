@@ -1,0 +1,7 @@
+{
+  "name": "pawzeeble_app",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,169 @@
+<ion-header>
+	<ion-toolbar class="toolbar">
+		<ion-buttons slot="start" style="float: left;">
+			<ion-icon (click)="closeModal()" ios="ios-arrow-back" md="md-arrow-back" style="font-size: 25px; color: #fff;"></ion-icon>
+		</ion-buttons>
+		<ion-title class="medium-font"
+			style="font-size:20px;line-height: 26px;color:#ffffff;margin-top:0%;margin-right:10%">
+			<span *ngIf="isOnline" class="OnlineDot"></span> &nbsp;
+			<span *ngIf="!isOnline" class="OfflineDot"></span> &nbsp;
+			{{receiverName | titlecase }} <span style="font-size: 12px; padding-bottom: 2%;" *ngIf="typing">typing...</span>
+			
+		</ion-title>
+		<ion-buttons slot="end" style="float: right;">
+			<ion-icon (click)="presentPopover($event)" ios="ios-more" md="md-more" style="font-size: 25px; color: #fff;"></ion-icon>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+	<div *ngIf="isLoading" style="width:100%;height:100px;text-align: center; margin-top: 70%;">
+	    <ion-spinner *ngIf="isLoading" name="crescent" id="pageLoader" color="orange" style="height: 64px;width: 64px">
+	    </ion-spinner>
+	</div>
+
+	<div class="messaging">
+		<div class="chat_msg">
+			<div class="mesgs">
+				<div class="chat_history">
+					<ion-grid>
+						<ion-row *ngFor="let message of messages">
+							<ion-col size="12" *ngIf="message.sendername !== senderName">
+								<div class="incoming_msg">
+									<div class="incoming_msg_img"> 
+									<img *ngIf="receiverImage === null" src="assets/img/profile_icon.png" style="border-radius: 50%;">
+									<img *ngIf="receiverImage !== null" src="{{receiverImage}}" style="border-radius: 50%;">
+									 </div>
+									<div class="received_msg">
+										<div class="received_withd_msg">
+											<p>{{ message.body }}</p>
+											<span class="time_date">{{ message.createdAt | date:'shortTime' }} | {{ message.createdAt | date }}</span>
+										</div>
+									</div>
+								</div>
+							</ion-col>
+
+							<ion-col size="12" *ngIf="message.sendername === senderName">
+								<div class="outgoing_msg">
+									<div class="sent_msg">
+										<div class="outgoing_withd_msg">
+										<p>{{ message.body }}</p>
+										<span class="time_date">{{ message.createdAt | date:'shortTime' }} | {{ message.createdAt | date }}</span>
+									</div>
+									</div>
+									<div class="outgoing_msg_img"> 
+									<img *ngIf="senderImage === null" src="assets/img/profile_icon.png" style="border-radius: 50%;">
+									<img *ngIf="senderImage !== null" src="{{senderImage}}" style="border-radius: 50%;">	
+									</div>
+								</div>
+								
+							</ion-col>
+							</ion-row>
+						</ion-grid>
+				</div>
+			</div>
+		</div>
+	</div>
+</ion-content>
+
+
+<ion-footer>
+	<ion-toolbar>
+		<ion-grid>
+			<ion-row>
+				<ion-col size="1">
+					<!-- <ion-icon (click)="selectFile($event)" name="add" style="font-size: 23px;
+					    margin-top: 62%;
+					    font-weight: bold; margin-top: 7px;" class="mt-3"></ion-icon> -->
+				</ion-col>
+
+				<ion-col size="9">
+					<ion-textarea placeholder="Write a message" class="write_msg" id="output" (keypress)="IsTyping()" style="background: #fff; height: 40px;margin-bottom: 2%;margin-left: 2%; border: 1px solid #f89d5f;" rows="1" [(ngModel)]="message"></ion-textarea>
+				</ion-col>
+
+				<ion-col size="2" [disabled]="message === ''">
+					<ion-button expand="block" fill="clear" color="primary" [disabled]="message === ''" class="msg-btn" (click)="SendMessage()" style="margin-top: 12px;">Send
+		        	</ion-button>
+					<!-- <span style="color:#0066cc; font-size: 12px;">Send</span> -->
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</ion-toolbar>
+</ion-footer>
+
+<!-- <ion-footer>
+	<ion-toolbar>
+		<ion-grid>
+			<ion-row>
+				<ion-col size="1">
+					<ion-icon (click)="selectFile()" name="add" style="font-size: 18px; margin-top: 7px;" class="mt-2"></ion-icon>
+				</ion-col>
+
+				<ion-col size="9">
+					<ion-textarea class="write_msg" id="output" (keypress)="IsTyping()" style="background: #fff; height: 40px;margin-bottom: 2%;margin-left: 2%;" rows="1" [(ngModel)]="message"></ion-textarea>
+					<input type="text" class="write_msg" placeholder="Write a message" />
+				</ion-col>
+
+				<ion-col size="2" [disabled]="message === ''">
+					<ion-button expand="block" fill="clear" color="primary" [disabled]="message === ''" class="msg-btn" (click)="SendMessage()">Send
+		        	</ion-button>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</ion-toolbar>
+</ion-footer> -->
+
+
+
+<!-- <ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons *ngIf="platform === 'android'" slot="start"
+      style="float: left;color: #ffffff;margin-left: 10px;font-size:16px" (click)="closeModal()">Cancel
+    </ion-buttons>
+    <ion-title [ngClass]="platform === 'ios' ? 'titleOnIos' : 'titleOnAndroid'">
+    <span>{{receiverName}}</span>
+    <p style="font-size: 12px;" *ngIf="isOnline">Online</p>
+	<p style="font-size: 12px" *ngIf="typing">typing...</p>
+</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row *ngFor="let message of messages">
+ 
+      <ion-col size="9" *ngIf="message.sendername !== senderName" class="message other-message">
+        <b>{{ message.sendername }}</b><br>
+        <span>{{ message.body }}</span>
+        <div class="time" text-right><br>{{ message.createdAt | date:'short' }}</div>
+      </ion-col>
+ 
+      <ion-col offset="3" size="9" *ngIf="message.sendername === senderName" class="message my-message">
+        <b>{{ message.sendername }}</b><br>
+        <span>{{ message.body }}</span>
+        <div class="time" text-right><br>{{ message.createdAt | date:'short' }}</div>
+      </ion-col>
+ 
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-row style="background: #6633cc;">
+      <ion-col size="10">
+      	<ion-icon (click)="selectFile()" style="color: white; font-size: 22px;" name="add-circle"></ion-icon>
+        <ion-textarea id="output" (keypress)="IsTyping()" style="background: #fff; height: 40px;margin-bottom: 2%;margin-left: 2%;" rows="1" [(ngModel)]="message"></ion-textarea>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button expand="block" fill="clear" color="primary" [disabled]="message === ''" class="msg-btn"
+          (click)="SendMessage()">
+          <ion-icon style="color: white; font-size: 22px;" name="send"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer> -->

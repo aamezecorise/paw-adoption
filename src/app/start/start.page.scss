@@ -1,0 +1,19 @@
+#map {
+    height: 90%;
+    transition: ease-in-out 150ms;
+}
+.centerMarker {
+    position: absolute;
+    z-index: 99;
+    height: 40px;
+    width: 40px;
+    top: 54%;
+    left: 50%;
+    margin-left: -21px;
+    margin-top: -41px;
+}
+.fabButton{
+    margin: 0% 0% 155% 0%;
+    height: 6vh;
+    width: 6vh;
+}
